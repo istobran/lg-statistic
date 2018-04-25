@@ -1,6 +1,7 @@
 import path from 'path'
 import alias from 'rollup-plugin-alias'
 import vue from 'rollup-plugin-vue'
+import copy from 'rollup-plugin-copy'
 import buble from 'rollup-plugin-buble'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
@@ -30,7 +31,8 @@ let plugins = [
     browser: true
   }),
   commonjs(),
-  nodeGlobals()
+  nodeGlobals(),
+  copy({ 'src/index.html': 'dist/index.html' })
 ]
 
 let config = {
