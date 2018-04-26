@@ -1,15 +1,23 @@
 <template>
   <v-container id="guangzhou">
     <v-layout row wrap>
-      <v-flex xs12>
+      <v-flex lg12>
         <v-data-table :headers="headers" :items="list" hide-actions :loading="!!dataLoading" class="elevation-1">
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
-            <td>{{ props.item.companyShortName }}</td>
+            <td>
+              <v-flex xs12 align-center>
+                <v-avatar :size="24" :tile="true" class="grey lighten-4">
+                  <img :src="'//www.lgstatic.com/thumbnail_100x100/' + props.item.companyLogo" alt="avatar">
+                </v-avatar>
+                <span class="ml-1">{{ props.item.companyShortName }}</span>
+              </v-flex>
+            </td>
             <td class="text-xs-right">{{ props.item.companySize }}</td>
             <td class="text-xs-right">{{ props.item.positionName }}</td>
             <td class="text-xs-right">{{ props.item.salary }}</td>
             <td class="text-xs-right">{{ props.item.workYear }}</td>
+            <td class="text-xs-right">{{ props.item.district }}</td>
             <td class="text-xs-right">{{ props.item.industryField }}</td>
             <td class="text-xs-right">{{ props.item.formatCreateTime }}</td>
           </template>
@@ -23,7 +31,6 @@
 </template>
 
 <style>
-#guangzhou { color: red }
 </style>
 
 <script>
@@ -55,6 +62,7 @@ export default {
         { text: 'Position', value: 'positionName' },
         { text: 'Salary', value: 'salary' },
         { text: 'Experience', value: 'workYear' },
+        { text: 'District', value: 'district' },
         { text: 'Field', value: 'industryField' },
         { text: 'Createtime', value: 'formatCreateTime' }
       ],

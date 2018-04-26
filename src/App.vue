@@ -32,7 +32,7 @@ export default {
   name: 'app',
   data() {
     return {
-      drawer: null
+      drawer: false
     }
   }
 }
