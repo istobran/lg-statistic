@@ -1,5 +1,5 @@
 import { APPID, SIGN } from "@/config";
-export default function(keyword) {
+export default function({ kw, page }) {
   return new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("load", function() {
@@ -18,6 +18,6 @@ export default function(keyword) {
     xhr.addEventListener("timeout", reject);
     xhr.open("POST", "http://route.showapi.com/1256-1");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send(`showapi_appid=${APPID}&showapi_sign=${SIGN}&city=广州&kd=${keyword}`);
+    xhr.send(`showapi_appid=${APPID}&showapi_sign=${SIGN}&city=广州&kd=${kw}&pn=${page}`);
   });
 }
