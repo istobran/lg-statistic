@@ -1,9 +1,9 @@
-import GuangZhou from 'views/Guangzhou.vue';
+import List from 'views/list.vue';
 export default [
-  { path: '*', redirect: '/guangzhou' },
+  { path: '*', redirect: '/list' },
   {
-      path: '/guangzhou',
-      name: 'guangzhou',
-      component: GuangZhou
+      path: '/list',
+      name: 'list',
+      component: List
   },
 ];

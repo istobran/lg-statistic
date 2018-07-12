@@ -1,8 +1,8 @@
 <template>
-  <v-container id="guangzhou">
+  <v-container id="list">
     <v-layout row wrap>
       <v-flex lg12>
-        <v-data-table :headers="headers" :items="list" hide-actions :loading="!!dataLoading" class="elevation-1">
+        <v-data-table :headers="headers" :items="list" hide-actions :loading="$root.loading" class="elevation-1">
           <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
             <td>
@@ -24,7 +24,7 @@
         </v-data-table>
       </v-flex>
       <v-flex class="mt-1 text-xs-right" xs12>
-        <v-pagination :length="pLength" v-model="pagination.page" @input="hit"></v-pagination>
+        <v-pagination :length="pLength" v-model="pagination.page" @input="fetchList"></v-pagination>
       </v-flex>
     </v-layout>
   </v-container>
@@ -34,58 +34,60 @@
 </style>
 
 <script>
-import * as API from "service/index";
+import API from "service/index";
+import bus from "../bus";
+
 export default {
-  name: 'guangzhou',
+  name: "list",
   computed: {
     pLength() {
       return Math.ceil(this.pagination.total / this.pagination.size);
     }
   },
-  watch: {
-    ["pagination.page"](value) {
-      this.fetchList(value);
-    }
-  },
   data() {
     return {
-      dataLoading: null,
       list: [],
       headers: [
         {
-          text: 'Company Name',
-          align: 'left',
+          text: "Company Name",
+          align: "left",
           sortable: false,
-          value: 'companyShortName'
+          value: "companyShortName"
         },
-        { text: 'Size', value: 'companySize' },
-        { text: 'Position', value: 'positionName' },
-        { text: 'Salary', value: 'salary' },
-        { text: 'Experience', value: 'workYear' },
-        { text: 'District', value: 'district' },
-        { text: 'Field', value: 'industryField' },
-        { text: 'Createtime', value: 'formatCreateTime' }
+        { text: "Size", value: "companySize" },
+        { text: "Position", value: "positionName" },
+        { text: "Salary", value: "salary" },
+        { text: "Experience", value: "workYear" },
+        { text: "District", value: "district" },
+        { text: "Field", value: "industryField" },
+        { text: "Createtime", value: "formatCreateTime" }
       ],
       pagination: {
         page: 1,
         total: 1,
-        size: 15,
+        size: 15
       }
-    }
+    };
   },
   mounted() {
+    console.log("vm: ", this);
     this.fetchList();
+    bus.$on("cityChanged", _ => {
+      this.pagination.page = 1;
+      this.fetchList();
+    });
   },
   methods: {
-    fetchList(page) {
-      if (this.dataLoading) return;
-      this.dataLoading = API.GuangZhou({ kw: "前端", page: page || this.pagination.page }).then(res => {
-        this.list = res.result;
-        this.pagination.total = res.totalCount;
-      }).catch(console.error).then(() => {
-        this.dataLoading = null;
-      });
+    fetchList() {
+      this.$root.loading = true;
+      API(this).fetch({ kw: "前端", page: this.pagination.page }).then(
+        res => {
+          this.list = res.result;
+          this.pagination.total = res.totalCount;
+          this.$root.loading = false;
+        }
+      );
     }
   }
-}
+};
 </script>

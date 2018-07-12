@@ -1,20 +1,10 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer fixed v-model="drawer" app>
-      <v-list dense>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-side-icon @click.stop="toggleCity" :disabled="$root.loading">
+        <v-icon>swap_horiz</v-icon>
+      </v-toolbar-side-icon>
+      <v-toolbar-title>{{ city.name }}</v-toolbar-title>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
@@ -27,12 +17,24 @@
 
 <script>
 import {scaleLinear} from "d3-scale";
+import cityList from './service/city';
+import bus from './bus';
 
 export default {
   name: 'app',
   data() {
     return {
-      drawer: false
+      drawer: false,
+      city: cityList[this.$root.cityIdx]
+    }
+  },
+  methods: {
+    toggleCity() {
+      if (this.$root.loading) return;
+      var idx = this.$root.cityIdx;
+      this.$root.cityIdx = (idx+1) % cityList.length;
+      this.city = cityList[this.$root.cityIdx];
+      bus.$emit("cityChanged");     // 通过 EventBus 通知子组件城市变更
     }
   }
 }

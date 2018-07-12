@@ -11,5 +11,11 @@ Vue.use(Vuetify);
 
 const app = new Vue({
   router: new VueRouter({ routes }),
-  render: h => h(App)
+  render: h => h(App),
+  data() {
+    return {
+      cityIdx: 0,
+      loading: false
+    }
+  }
 }).$mount('#app');
