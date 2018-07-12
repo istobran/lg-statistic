@@ -18,7 +18,6 @@
 <script>
 import {scaleLinear} from "d3-scale";
 import cityList from './service/city';
-import bus from './bus';
 
 export default {
   name: 'app',
@@ -34,7 +33,6 @@ export default {
       var idx = this.$root.cityIdx;
       this.$root.cityIdx = (idx+1) % cityList.length;
       this.city = cityList[this.$root.cityIdx];
-      bus.$emit("cityChanged");     // 通过 EventBus 通知子组件城市变更
     }
   }
 }

@@ -35,13 +35,18 @@
 
 <script>
 import API from "service/index";
-import bus from "../bus";
 
 export default {
   name: "list",
   computed: {
     pLength() {
       return Math.ceil(this.pagination.total / this.pagination.size);
+    }
+  },
+  watch: {
+    ["$root.cityIdx"](value) {
+      this.pagination.page = 1;
+      this.fetchList();
     }
   },
   data() {
@@ -70,12 +75,7 @@ export default {
     };
   },
   mounted() {
-    console.log("vm: ", this);
     this.fetchList();
-    bus.$on("cityChanged", _ => {
-      this.pagination.page = 1;
-      this.fetchList();
-    });
   },
   methods: {
     fetchList() {
